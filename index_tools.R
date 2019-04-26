@@ -1,4 +1,3 @@
-# Based on DE_analyses.R
 filter_dges <- function(exon, intron, group) {
     get_lib_sizes <- function(exon, intron) {
         list(
@@ -9,8 +8,8 @@ filter_dges <- function(exon, intron, group) {
     }
 
     # Filter out genes across all count sets
-    keep.exon <- filterByExpr(exon, group = group)
-    keep.intron <- filterByExpr(intron, group = group)
+    keep.exon <- edgeR::filterByExpr(exon, group = group)
+    keep.intron <- edgeR::filterByExpr(intron, group = group)
     keep.exprs <- keep.exon & keep.intron
 
     exon <- exon[keep.exprs, ]
@@ -20,8 +19,8 @@ filter_dges <- function(exon, intron, group) {
     exon$samples$lib.size <- lib.sizes$total
     intron$samples$lib.size <- lib.sizes$total
 
-    exon <- calcNormFactors(exon)
-    intron <- calcNormFactors(intron)
+    exon <- edgeR::calcNormFactors(exon)
+    intron <- edgeR::calcNormFactors(intron)
 
     list(
         exon = exon,
@@ -66,32 +65,30 @@ index_analysis <- function(exon, intron, group, design = NULL, contrast = NULL, 
     get_voom <- function(dge) {
         stopifnot(is(dge, "DGEList"))
 
-        voom(dge, design, plot = FALSE, save.plot = TRUE)
+        limma::voom(dge, design, plot = FALSE, save.plot = TRUE)
     }
 
     get_fit <- function(v, contrast) {
         stopifnot(is(v, "EList"))
 
-        fit <- lmFit(v, design)
+        fit <- limma::lmFit(v, design)
 
-        if (is.null(contrast)) {
-            fit <- eBayes(fit)
-        } else {
-            fit <- contrasts.fit(fit, contrasts = contrast)
-            fit <- eBayes(fit)
+        if (!is.null(contrast)) {
+            fit <- limma::contrasts.fit(fit, contrasts = contrast)
         }
 
+        fit <- limma::eBayes(fit)
         return(fit)
     }
 
     get_dt <- function(fit, p.value) {
         stopifnot(is(p.value, "numeric"))
 
-        decideTests(fit, p.value = p.value)[, ncol(fit)]
+        limma::decideTests(fit, p.value = p.value)[, ncol(fit)]
     }
 
     get_top <- function(fit) {
-        topTable(fit, coef = ncol(fit), number = Inf, sort.by = "none")
+        limma::topTable(fit, coef = ncol(fit), number = Inf, sort.by = "none")
     }
 
     get_full_dt <- function(fite, fiti, p.value) {
@@ -133,55 +130,6 @@ index_analysis <- function(exon, intron, group, design = NULL, contrast = NULL, 
     )
 }
 
-# load data ----
-library(limma)
-library(edgeR)
-library(Homo.sapiens)
-# Examine Total RNA samples only
-keep <-
-    c(paste0("R", 1:3, ".000.Total"), paste0("R", 1:3, ".100.Total"))
-load("./counts/Gencode/Genebody_genelevel.RData")
-x <- DGEList(counts$counts)
-x$genes <- counts$annotation
-geneid <- strsplit2(rownames(x), split = "\\.")[, 1]
-genes <-
-    select(Homo.sapiens,
-           keys = geneid,
-           columns = "SYMBOL",
-           keytype = "ENSEMBL")
-m <- match(geneid, genes$ENSEMBL)
-x$genes$Symbol <- genes$SYMBOL[m]
-x <- x[, keep]
-genebody <- x
-
-# Exon counts
-load("./counts/Gencode/Exon_genelevel.RData")
-x <- DGEList(counts$counts)
-x$genes <-
-    counts$annotation # Length is actually the length of individual exons
-nfeatures <- nchar(gsub(";", "", x$genes$Strand))
-x$genes <- x$genes[, c("GeneID", "Length")]
-x$genes$Length <- as.numeric(as.character(x$genes$Length))
-x$genes$NFeatures <- nfeatures
-x <- x[, keep]
-exon <- x
-
-# Intron counts
-load("./counts/Gencode/Delta_genelevel.RData")
-x <- DGEList(counts$counts)
-x$genes <-
-    as.data.frame(cbind(
-        GeneID = rownames(x),
-        Length = genebody$genes$Length - exon$genes$Length + 1
-    ))
-x$genes$Length <- as.numeric(as.character(x$genes$Length))
-x$genes$NFeatures <- exon$genes$NFeatures - 1
-x <- x[, keep]
-intron <- x
-
-group <- as.factor(rep(c("000", "100"), each = 3))
-
-# run function ----
 plot_voom <- function(index_output) {
     par(mfrow = c(1, 2)); on.exit(par(mfrow = c(1, 1)))
 
@@ -198,8 +146,8 @@ plot_voom <- function(index_output) {
 }
 
 plot_lcpm_cor <- function(index_output) {
-    exon_lcpm <- cpm(index_output$dges$exon, log = TRUE)
-    intron_lcpm <- cpm(index_output$dges$intron, log = TRUE)
+    exon_lcpm <- edgeR::cpm(index_output$dges$exon, log = TRUE)
+    intron_lcpm <- edgeR::cpm(index_output$dges$intron, log = TRUE)
 
     par(mfrow = c(1, 2))
     on.exit(par(mfrow = c(1, 1)))
@@ -255,8 +203,3 @@ plot_index <- function(index_output) {
     abline(a = 0, b = 1, col = "#BBBBBB", lwd = 2)
     par(mfrow = c(1, 1))
 }
-
-x <- index_analysis(exon, intron, group, design = model.matrix(~0 + group), contrast = c(-1, 1))
-plot_voom(x)
-plot_lcpm_cor(x)
-plot_index(x)
