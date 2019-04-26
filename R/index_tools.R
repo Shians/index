@@ -131,13 +131,18 @@ index_analysis <- function(exon, intron, group, design = NULL, contrast = NULL, 
 }
 
 plot_voom <- function(index_output) {
+    capitalise <- function(x) {
+        substring(x, 1, 1) <- toupper(substring(x, 1, 1))
+        x
+    }
+
     par(mfrow = c(1, 2)); on.exit(par(mfrow = c(1, 1)))
 
     vooms <- index_output$voom
 
     for (vname in names(vooms)) {
         v <- vooms[[vname]]
-        v$voom.xy$main <- vname
+        v$voom.xy$main <- capitalise(vname)
         v$voom.xy$pch <- 20
         do.call(plot, v$voom.xy)
         v$voom.line$col <- "red"
@@ -152,7 +157,8 @@ plot_lcpm_cor <- function(index_output) {
     par(mfrow = c(1, 2))
     on.exit(par(mfrow = c(1, 1)))
 
-    plot(rowMeans(intron_lcpm), rowMeans(exon_lcpm))
+    plot(rowMeans(intron_lcpm), rowMeans(exon_lcpm), xlab = "Intron", ylab = "Exon", col = "#666666")
+    abline(a = 0, b = 1, lty = 2, lwd = 1.5)
     boxplot(list(Intron = rowMeans(intron_lcpm), Exon = rowMeans(exon_lcpm)))
 }
 
