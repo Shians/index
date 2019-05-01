@@ -9,11 +9,6 @@
 \packageDescription{INdEX}
 }
 \details{
-
-The DESCRIPTION file:
-\packageDESCRIPTION{INdEX}
-\packageIndices{INdEX}
-\link{\code{index_analysis}}
 }
 \author{
 \packageMaintainer{INdEX}

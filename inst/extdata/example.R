@@ -1,3 +1,5 @@
+library(INdEX)
+
 exon <- readRDS(system.file("extdata/exon_dge.Rds", package = "INdEX"))
 intron <- readRDS(system.file("extdata/intron_dge.Rds", package = "INdEX"))
 group <- readRDS(system.file("extdata/group.Rds", package = "INdEX"))
