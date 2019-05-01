@@ -13,7 +13,7 @@
 The DESCRIPTION file:
 \packageDESCRIPTION{INdEX}
 \packageIndices{INdEX}
-~~ An overview of how to use the package, including the most important functions ~~
+\link{\code{index_analysis}}
 }
 \author{
 \packageMaintainer{INdEX}
@@ -24,5 +24,14 @@ The DESCRIPTION file:
 
 \keyword{ package }
 \examples{
-~~ simple examples of the most important functions ~~
+library(INdEX)
+
+exon <- readRDS(system.file("extdata/exon_dge.Rds", package = "INdEX"))
+intron <- readRDS(system.file("extdata/intron_dge.Rds", package = "INdEX"))
+group <- readRDS(system.file("extdata/group.Rds", package = "INdEX"))
+
+x <- index_analysis(exon, intron, group)
+plot_voom(x)
+plot_lcpm_cor(x)
+plot_index(x)
 }
