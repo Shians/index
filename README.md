@@ -1,4 +1,4 @@
-# INtron differences to EXon
+# INtron differences to EXon (INdEX)
 
 ## Installation
 
