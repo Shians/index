@@ -1,9 +1,13 @@
-Package: anRpackage
+Package: INdEX
 Type: Package
-Title: What the package does (short line)
+Title: Perform analysis of intron and exon counts.
 Version: 1.0
 Date: 2019-04-26
-Author: Who wrote it
-Maintainer: Who to complain to <yourfault@somewhere.net>
-Description: More about what it does (maybe more than one line)
+Author: Shian Su
+Maintainer: Shian Su <su.s@wehi.edu.au>
+Description: Perform analysis of intron and exon counts.
 License: GPL-3
+Depends:
+    limma,
+    edgeR
+RoxygenNote: 6.1.1

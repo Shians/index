@@ -1,5 +1,17 @@
-index_analysis <-
-function(exon, intron, group, design = NULL, contrast = NULL, p.value = 0.01) {
+#' Perform INtron differences to EXons (INdEX) analysis
+#'
+#' @param exon the DGE list containing exon information
+#' @param intron the DGE list containing intron information
+#' @param group the vector of groups
+#' @param design the design matrix
+#' @param contrast the contrast to test
+#' @param p.value the p-value for decideTests
+#'
+#' @return a list containing a combined decideTest result, the input dges, voom objects and tops for exon and introns.
+#' @export
+#'
+#' @examples
+index_analysis <- function(exon, intron, group, design = NULL, contrast = NULL, p.value = 0.05) {
     # Input checks ----
     if (!all.equal(dim(exon), dim(intron))) {
         stop("exon and intron DGEs must have the same dimensions")
@@ -14,7 +26,7 @@ function(exon, intron, group, design = NULL, contrast = NULL, p.value = 0.01) {
     intron <- dges$intron
 
     if (is.null(design)) {
-        message("creating desing matrix by 'model.matrix(~group)'")
+        message("creating design matrix by 'model.matrix(~group)'")
         design <- model.matrix(~group)
     }
 
@@ -93,8 +105,32 @@ function(exon, intron, group, design = NULL, contrast = NULL, p.value = 0.01) {
         get_top
     )
 
+    decide_tests <- get_full_dt(fits$exon, fits$intron, p.value)
+
+    category <- local({
+        category_list <- with(decide_tests,
+            list(
+                `Mixed+-` = (Exon == 1) & (Intron == -1),
+                `Mixed-+` = (Exon == -1) & (Intron == 1),
+                `Intron-` = (Intron == -1) & (Exon == 0),
+                `Intron+` = (Intron == 1) & (Exon == 0),
+                `Exon-` = (Exon == -1) & (Intron == 0),
+                `Exon+` = (Exon == 1) & (Intron == 0),
+                `+` = (Exon == 1) & (Intron == 1),
+                `-` = (Exon == -1) & (Intron == -1)
+            )
+        )
+
+        category <- character(length(category_list[[1]]))
+        for (n in names(category_list)) {
+            category[category_list[[n]]] <- n
+        }
+        category
+    })
+
     list(
-        decide.tests = get_full_dt(fits$exon, fits$intron, p.value),
+        decide.tests = decide_tests,
+        category = category,
         dges = dges,
         voom = vooms,
         tops = tops

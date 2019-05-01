@@ -1,3 +1,11 @@
+#' Plot correlation and bar plots of logCPM between introns and exons
+#'
+#' @param index_output the output from running index_analysis
+#'
+#' @return None
+#' @export
+#'
+#' @examples
 plot_lcpm_cor <-
 function(index_output) {
     exon_lcpm <- edgeR::cpm(index_output$dges$exon, log = TRUE)

@@ -1,3 +1,11 @@
+#' Plot voom for introns and exons
+#'
+#' @param index_output the output from running index_analysis
+#'
+#' @return None
+#' @export
+#'
+#' @examples
 plot_voom <-
 function(index_output) {
     capitalise <- function(x) {
