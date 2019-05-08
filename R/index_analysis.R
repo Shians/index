@@ -1,13 +1,26 @@
 #' Perform INtron differences to EXons (INdEX) analysis
 #'
-#' @param exon the DGE list containing exon information
-#' @param intron the DGE list containing intron information
+#' @param exon the DGEList containing exon information
+#' @param intron the DGEList containing intron information
 #' @param group the vector of groups
-#' @param design the design matrix
-#' @param contrast the contrast to test
+#' @param design the design matrix (if absent, design will be constructed from group argument)
+#' @param contrast the contrast vector to test (cannot be a matrix)
 #' @param p.value the p-value for decideTests
 #'
-#' @return a list containing a combined decideTest result, the input dges, voom objects and tops for exon and introns.
+#' @details There are 9 INdEX categories for genes stored in the \code{category} slot of the output:
+#' \enumerate{
+#'     \item "+": significant upregulation both exon and intron
+#'     \item "-": significant downregulation both exon and intron
+#'     \item "Exon+": significant upregulation exons only
+#'     \item "Exon-": significant downregulation exons only
+#'     \item "Intron-": significant upregulation introns only
+#'     \item "Intron-": significant downregulation introns only
+#'     \item "Mixed+-": significant upregulation in exons and downregulation in introns
+#'     \item "Mixed-+": significant upregulation in introns and downregulation in exons
+#'     \item "": No significance in any other category
+#' }
+#'
+#' @return list containing a combined decideTest result, INdEX categories, the input dges, voom objects and tops for exon and introns.
 #' @export
 #'
 #' @examples

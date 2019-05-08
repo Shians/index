@@ -8,21 +8,35 @@ index_analysis(exon, intron, group, design = NULL, contrast = NULL,
   p.value = 0.05)
 }
 \arguments{
-\item{exon}{the DGE list containing exon information}
+\item{exon}{the DGEList containing exon information}
 
-\item{intron}{the DGE list containing intron information}
+\item{intron}{the DGEList containing intron information}
 
 \item{group}{the vector of groups}
 
-\item{design}{the design matrix}
+\item{design}{the design matrix (if absent, design will be constructed from group argument)}
 
-\item{contrast}{the contrast to test}
+\item{contrast}{the contrast vector to test (cannot be a matrix)}
 
 \item{p.value}{the p-value for decideTests}
 }
 \value{
-a list containing a combined decideTest result, the input dges, voom objects and tops for exon and introns.
+list containing a combined decideTest result, INdEX categories, the input dges, voom objects and tops for exon and introns.
 }
 \description{
 Perform INtron differences to EXons (INdEX) analysis
+}
+\details{
+There are 9 INdEX categories for genes stored in the \code{category} slot of the output:
+\enumerate{
+    \item "+": significant upregulation both exon and intron
+    \item "-": significant downregulation both exon and intron
+    \item "Exon+": significant upregulation exons only
+    \item "Exon-": significant downregulation exons only
+    \item "Intron-": significant upregulation introns only
+    \item "Intron-": significant downregulation introns only
+    \item "Mixed+-": significant upregulation in exons and downregulation in introns
+    \item "Mixed-+": significant upregulation in introns and downregulation in exons
+    \item "": No significance in any other category
+}
 }
