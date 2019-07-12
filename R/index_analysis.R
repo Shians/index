@@ -20,7 +20,7 @@
 #'     \item "": No significance in any other category
 #' }
 #'
-#' @return list containing a combined decideTest result, INdEX categories, the input dges, voom objects and tops for exon and introns.
+#' @return list containing a combined decideTest result, INdEX categories, the input dges, voom objects and top tables for exon and introns.
 #' @export
 #'
 #' @examples

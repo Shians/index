@@ -4,7 +4,7 @@
 \alias{plot_index}
 \title{Create main INdEX analysis plots}
 \usage{
-plot_index(index_output)
+plot_index(index_output, type = c("tstat", "logfc"))
 }
 \arguments{
 \item{index_output}{the output from running index_analysis}
