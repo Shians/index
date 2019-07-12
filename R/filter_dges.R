@@ -1,5 +1,4 @@
-filter_dges <-
-function(exon, intron, group) {
+filter_dges <- function(exon, intron, group) {
     get_lib_sizes <- function(exon, intron) {
         list(
             exon = colSums(exon$counts),
@@ -7,6 +6,9 @@ function(exon, intron, group) {
             total = colSums(exon$counts + intron$counts)
         )
     }
+
+    # Use pre-filtering lib sizes because it reflects the sequencing depth better
+    lib.sizes <- get_lib_sizes(exon, intron)
 
     # Filter out genes across all count sets
     keep.exon <- edgeR::filterByExpr(exon, group = group)
@@ -16,7 +18,6 @@ function(exon, intron, group) {
     exon <- exon[keep.exprs, ]
     intron <- intron[keep.exprs, ]
 
-    lib.sizes <- get_lib_sizes(exon, intron)
     exon$samples$lib.size <- lib.sizes$total
     intron$samples$lib.size <- lib.sizes$total
 
@@ -27,4 +28,14 @@ function(exon, intron, group) {
         exon = exon,
         intron = intron
     )
+}
+
+filter_by_expr <- function(dge, group) {
+    # Filter out genes across all count sets
+    keep <- edgeR::filterByExpr(dge, group = group)
+
+    dge <- dge[keep, , keep.lib.sizes = FALSE]
+    dge <- edgeR::calcNormFactors(dge)
+
+    dge
 }
