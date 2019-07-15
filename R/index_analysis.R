@@ -91,10 +91,8 @@ index_analysis <- function(exon, intron, group, design = NULL, contrast = NULL, 
         dte <- get_dt(fite, p.value = p.value)
         dti <- get_dt(fiti, p.value = p.value)
 
-        dt <- set_colnames(
-            cbind(dte, dti),
-            c("Exon", "Intron")
-        )
+        dt <- cbind(dte, dti)
+        colnames(dt) <- c("Exon", "Intron")
 
         geneid <- rownames(dt)
         data.frame(dt)
