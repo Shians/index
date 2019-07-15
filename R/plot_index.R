@@ -8,13 +8,23 @@
 #'
 #' @examples
 plot_index <- function(index_output, type = c("tstat", "logfc")) {
+    # check object validity
+    stopifnot(
+        !is.null(index_output$category),
+        !is.null(index_output$decide.tests),
+        !is.null(index_output$dges),
+        !is.null(index_output$voom),
+        !is.null(index_output$tops)
+    )
+
     type <- match.arg(type)
 
     par(mfrow = c(1, 2))
     on.exit(par(mfrow = c(1, 1)))
 
+    # TODO: Sort out the levels to remove these manual reordering
     bar_col <- RColorBrewer::brewer.pal(9, "Paired")
-    bar_col <- bar_col[c(3:4, 5:8, 1:2, 9)]
+    bar_col <- bar_col[c(3:4, 7:8, 5:6, 1:2, 9)]
 
     # assign colours to points, every point should only belong to one category
     categories <- index_output$category
