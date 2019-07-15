@@ -26,11 +26,11 @@
 #' @examples
 index_analysis <- function(exon, intron, group, design = NULL, contrast = NULL, p.value = 0.05) {
     # Input checks ----
-    if (!all.equal(dim(exon), dim(intron))) {
+    if (isFALSE(all.equal(dim(exon), dim(intron)))) {
         stop("exon and intron DGEs must have the same dimensions")
     }
 
-    if (!all.equal(dimnames(exon), dimnames(intron))) {
+    if (isFALSE(all.equal(dimnames(exon), dimnames(intron)))) {
         stop("exon and intron DGEs must have the same dimname()")
     }
 
@@ -91,7 +91,11 @@ index_analysis <- function(exon, intron, group, design = NULL, contrast = NULL, 
         dte <- get_dt(fite, p.value = p.value)
         dti <- get_dt(fiti, p.value = p.value)
 
-        dt <- cbind(Exon = dte, Intron = dti)
+        dt <- set_colnames(
+            cbind(dte, dti),
+            c("Exon", "Intron")
+        )
+
         geneid <- rownames(dt)
         data.frame(dt)
     }
