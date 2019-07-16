@@ -2,7 +2,7 @@
 % Please edit documentation in R/index_analysis.R
 \name{index_analysis}
 \alias{index_analysis}
-\title{Perform INtron differences to EXons (INdEX) analysis}
+\title{Perform INtron differences to EXons (index) analysis}
 \usage{
 index_analysis(exon, intron, group, design = NULL, contrast = NULL,
   p.value = 0.05)
@@ -21,13 +21,13 @@ index_analysis(exon, intron, group, design = NULL, contrast = NULL,
 \item{p.value}{the p-value for decideTests}
 }
 \value{
-list containing a combined decideTest result, INdEX categories, the input dges, voom objects and tops for exon and introns.
+list containing a combined decideTest result, index categories, the input dges, voom objects and top tables for exon and introns.
 }
 \description{
-Perform INtron differences to EXons (INdEX) analysis
+Perform INtron differences to EXons (index) analysis
 }
 \details{
-There are 9 INdEX categories for genes stored in the \code{category} slot of the output:
+There are 9 index categories for genes stored in the \code{category} slot of the output:
 \enumerate{
     \item "+": significant upregulation both exon and intron
     \item "-": significant downregulation both exon and intron

@@ -1,4 +1,4 @@
-#' Create main INdEX analysis plots
+#' Create main index analysis plots
 #'
 #' @param index_output the output from running index_analysis
 #' @param type the type of value to plot between exon and introns (default: "tstat")
@@ -45,7 +45,7 @@ plot_index <- function(index_output, type = c("tstat", "logfc")) {
         category_counts,
         col = bar_col,
         las = 2,
-        main = "INdEX Categories"
+        main = "index Categories"
     )
 
     if (type == "tstat") {

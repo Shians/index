@@ -1,8 +1,8 @@
-library(INdEX)
+library(index)
 
-exon <- readRDS(system.file("extdata/exon_dge.Rds", package = "INdEX"))
-intron <- readRDS(system.file("extdata/intron_dge.Rds", package = "INdEX"))
-group <- readRDS(system.file("extdata/group.Rds", package = "INdEX"))
+exon <- readRDS(system.file("extdata/exon_dge.Rds", package = "index"))
+intron <- readRDS(system.file("extdata/intron_dge.Rds", package = "index"))
+group <- readRDS(system.file("extdata/group.Rds", package = "index"))
 
 x <- index_analysis(exon, intron, group, p.value = 0.01)
 

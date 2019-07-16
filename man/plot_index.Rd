@@ -2,16 +2,18 @@
 % Please edit documentation in R/plot_index.R
 \name{plot_index}
 \alias{plot_index}
-\title{Create main INdEX analysis plots}
+\title{Create main index analysis plots}
 \usage{
 plot_index(index_output, type = c("tstat", "logfc"))
 }
 \arguments{
 \item{index_output}{the output from running index_analysis}
+
+\item{type}{the type of value to plot between exon and introns (default: "tstat")}
 }
 \value{
 None
 }
 \description{
-Create main INdEX analysis plots
+Create main index analysis plots
 }

@@ -1,14 +1,24 @@
-# INtron differences to EXon (index)
+\name{index-package}
+\alias{index-package}
+\alias{index}
+\docType{package}
+\title{
+\packageTitle{index}
+}
+\description{
+\packageDescription{index}
+}
+\details{
+}
+\author{
+\packageMaintainer{index}
+}
+\references{
 
-## Installation
+}
 
-```r
-devtools::install_github("shians/index")
-```
-
-## Example usage
-
-```r
+\keyword{ package }
+\examples{
 library(index)
 
 exon <- readRDS(system.file("extdata/exon_dge.Rds", package = "index"))
@@ -19,4 +29,4 @@ x <- index_analysis(exon, intron, group)
 plot_voom(x)
 plot_lcpm_cor(x)
 plot_index(x)
-```
+}

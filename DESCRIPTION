@@ -1,4 +1,4 @@
-Package: INdEX
+Package: index
 Type: Package
 Title: Perform analysis of intron and exon counts.
 Version: 1.0
